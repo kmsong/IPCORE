@@ -5,16 +5,25 @@ fBasename		= $(basename $(notdir $(MODEL_PATH)/$(iFile)))
 #$(MAKECMDGOALS) : sim
 #	@echo $(MAKECMDGOALS)
 
-SIM : GEN_TV
-	ncverilog -f sim.f \
+NCSIM : GEN_TV
+	ncverilog -clean -f sim.f +access+rwc +nc64bit \
 	+defparam+tb_aq_djpeg.sBasenameMem="$(fBasename).mem" \
 	+defparam+tb_aq_djpeg.sBasenameLog="$(fBasename).log" \
 	+defparam+tb_aq_djpeg.sBasenameDat="$(fBasename).dat"
 	$(MODEL_PATH)/convsim $(fBasename).dat $(fBasename).bmp
-	+display $(fBasename).bmp &
+	#display $(fBasename).bmp
+
+IRUN : GEN_TV
+	#irun -f sim.f -access +rwc -processor 4 -profthread
+	irun -clean -f sim.f -access +rwc -64bit \
+	-defparam tb_aq_djpeg.sBasenameMem="$(fBasename).mem" \
+	-defparam tb_aq_djpeg.sBasenameLog="$(fBasename).log" \
+	-defparam tb_aq_djpeg.sBasenameDat="$(fBasename).dat"
+	$(MODEL_PATH)/convsim $(fBasename).dat $(fBasename).bmp
+	#display $(fBasename).bmp
 
 GEN_TV :
 	gcc -o $(MODEL_PATH)/convbtoh $(MODEL_PATH)/convbtoh.c
 	$(MODEL_PATH)/convbtoh $(MODEL_PATH)/$(iFile) $(fBasename).mem
-	+display $(MODEL_PATH)/$(iFile) &
+	#+display $(MODEL_PATH)/$(iFile) &
 
