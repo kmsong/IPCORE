@@ -88,9 +88,15 @@ module tb_aq_djpeg;
 		rst = 1'b1;
 	end
 
+// add by kms
+parameter               sBasenameMem    = "sample2.mem"     ;
+parameter               sBasenameLog    = "sample2.log"     ;
+parameter               sBasenameDat    = "sample2.dat"     ;
+
 	// Read JPEG File
 	initial begin
-		$readmemh("/mnt/disk1/Public/FPGA_Magazine_No.6/DJPEG_IP/test.mem",JPEG_MEM);
+		$readmemh(sBasenameMem,JPEG_MEM);   // add by kms
+//		$readmemh("test.mem",JPEG_MEM);  // del by kms
 	end
 
 	// Initial
@@ -99,7 +105,12 @@ module tb_aq_djpeg;
 		DATA_ENABLE <= 1'b0;
 		wait (rst == 1'b1);
 		@(posedge clk);
+	    $display("------------------------------");
 		$display(" Start Clock: %d",count);
+	    $display("------------------------------");
+        $display("%s", sBasenameMem);
+        $display("%s", sBasenameLog);
+        $display("%s", sBasenameDat);
 		@(posedge clk);
 		@(posedge clk);
 		DATA_ENABLE <= 1'b1;
@@ -121,10 +132,10 @@ module tb_aq_djpeg;
 		$display("------------------------------");
 		$display("Image Run");
 		$display("------------------------------");
-		$display(" X: %4d",i,u_aq_djpeg.OutWidth);
-		$display(" Y: %4d",i,u_aq_djpeg.OutHeight);
-		$display(" Component: %4d",i,u_aq_djpeg.JpegComp);
-		$display(" BlockWidth: %4d",i,u_aq_djpeg.JpegBlockWidth);
+		$display(" X: %4d",u_aq_djpeg.OutWidth);
+		$display(" Y: %4d",u_aq_djpeg.OutHeight);
+		$display(" Component: %4d",u_aq_djpeg.JpegComp);
+		$display(" BlockWidth: %4d",u_aq_djpeg.JpegBlockWidth);
 		$display("------------------------------");
 		$display(" DQT Y Table");
 		for(i=0;i<64;i=i+1) begin
@@ -150,7 +161,6 @@ module tb_aq_djpeg;
 		for(i=0;i<16;i=i+1) begin
 		 $display(" %2d: %2x",i,u_aq_djpeg.u_jpeg_huffman.u_jpeg_dht.DHT_Ydc[i]);
 		end
-		$display("------------------------------");
 
 		$display("------------------------------");
 		$display(" huffman Y-AC Code/Number");
@@ -158,41 +168,40 @@ module tb_aq_djpeg;
 		 $display(" %2d: %2x,%2x",i,u_aq_djpeg.u_jpeg_huffman.u_jpeg_hm_decode.HuffmanTable1r[i],u_aq_djpeg.u_jpeg_huffman.u_jpeg_hm_decode.HuffmanNumber1r[i]);
 		end
 		$display("------------------------------");
-
-		$display("------------------------------");
 		$display(" huffman Y-AC Table");
 		for(i=0;i<162;i=i+1) begin
 		 $display(" %2d: %2x",i,u_aq_djpeg.u_jpeg_huffman.u_jpeg_dht.DHT_Yac[i]);
 		end
-		$display("------------------------------");
-
 		$display("------------------------------");
 		$display(" huffman C-DC Table");
 		for(i=0;i<16;i=i+1) begin
 		 $display(" %2d: %2x,%2x",i,u_aq_djpeg.u_jpeg_huffman.u_jpeg_hm_decode.HuffmanTable2r[i],u_aq_djpeg.u_jpeg_huffman.u_jpeg_hm_decode.HuffmanNumber2r[i]);
 		end
 		$display("------------------------------");
-
-		$display("------------------------------");
 		$display(" huffman C-DC Table");
 		for(i=0;i<16;i=i+1) begin
 		 $display(" %2d: %2x",i,u_aq_djpeg.u_jpeg_huffman.u_jpeg_dht.DHT_Cdc[i]);
 		end
-		$display("------------------------------");
-
 		$display("------------------------------");
 		$display(" huffman C-AC Table");
 		for(i=0;i<16;i=i+1) begin
 		 $display(" %2d: %2x,%2x",i,u_aq_djpeg.u_jpeg_huffman.u_jpeg_hm_decode.HuffmanTable3r[i],u_aq_djpeg.u_jpeg_huffman.u_jpeg_hm_decode.HuffmanNumber3r[i]);
 		end
 		$display("------------------------------");
-
-		$display("------------------------------");
 		$display(" huffman C-AC Table");
 		for(i=0;i<162;i=i+1) begin
 		 $display(" %2d: %2x",i,u_aq_djpeg.u_jpeg_huffman.u_jpeg_dht.DHT_Cac[i]);
 		end
 		$display("------------------------------");
+		$display(" X: %4d",u_aq_djpeg.OutWidth);
+		$display(" Y: %4d",u_aq_djpeg.OutHeight);
+		$display(" Component: %4d",u_aq_djpeg.JpegComp);
+		$display(" BlockWidth: %4d",u_aq_djpeg.JpegBlockWidth);
+		$display("------------------------------");
+        $display("%s", sBasenameMem);
+        $display("%s", sBasenameLog);
+        $display("%s", sBasenameDat);
+	    $display("------------------------------");
 	end
 /*
 	integer Phase8Count;
@@ -214,7 +223,7 @@ module tb_aq_djpeg;
 		 @(posedge clk);
 		 if(u_aq_djpeg.u_jpeg_huffman.u_jpeg_hm_decode.DataOutEnable == 1'b1) begin
 			DataOutEnable <= DataOutEnable + 1;
-			$display(" DataOutEnable: %d", DataOutEnable);
+			$fdisplay(fDescLog, " DataOutEnable: %d", DataOutEnable); // mod by kms
 		end
 		end
 	end
@@ -226,7 +235,7 @@ module tb_aq_djpeg;
 		 @(posedge clk);
 		 if((u_aq_djpeg.u_jpeg_ycbcr.ConvertRead == 1'b1 == 1'b1) && (u_aq_djpeg.u_jpeg_ycbcr.ConvertAddress == 8'd255)) begin
 			ConvertEnable <= ConvertEnable + 1;
-			$display(" ConvertEnable: %d", ConvertEnable);
+			$fdisplay(fDescLog, " ConvertEnable: %d", ConvertEnable); // mod by kms
 		end
 		end
 	end
@@ -365,23 +374,24 @@ module tb_aq_djpeg;
 	end
 */
 
-	integer address;
-	integer fp;
+	integer address     ;
+	integer fp          ;
+	integer fDescLog    ;   // add by kms
 
 	// ??????????????????????????????
 	initial begin
 		while(1) begin
 		 if(u_aq_djpeg.OutEnable == 1'b1) begin
 			address = u_aq_djpeg.OutWidth * u_aq_djpeg.OutPixelY + u_aq_djpeg.OutPixelX;
-			$display(" RGB[%4d,%4d][%4d,%4d]: %2x,%2x,%2x",OutPixelX,OutPixelY,OutWidth,OutHeight,OutR,OutG,OutB);
+			$fdisplay(fDescLog," RGB[%4d,%4d][%4d,%4d]: %2x,%2x,%2x",OutPixelX,OutPixelY,OutWidth,OutHeight,OutR,OutG,OutB); // mod by kms
 			rgb_mem[address] = {OutR,OutG,OutB};
 		 end
 		 @(posedge clk);
 		end
 	end
 
-
 	initial begin
+		fDescLog = $fopen(sBasenameLog);
 		wait(!JPEG_IDLE);
 		wait(JPEG_IDLE);
 
@@ -395,7 +405,7 @@ module tb_aq_djpeg;
 		@(posedge clk);
 
 		$display(" End Clock %d",count);
-		fp = $fopen("sim.dat");
+		fp = $fopen(sBasenameDat);
 		$fwrite(fp,"%0d\n",OutWidth);
 		$fwrite(fp,"%0d\n",OutHeight);
 
@@ -403,6 +413,7 @@ module tb_aq_djpeg;
 		 $fwrite(fp,"%06x\n",rgb_mem[i]);
 		end
 		$fclose(fp);
+		$fclose(fDescLog);  // add by kms
 
 //		$coverage_save("sim.cov");
 		$finish();

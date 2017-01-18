@@ -31,7 +31,7 @@ typedef struct tagBITMAPINFOHEADER{
 } BITMAPINFOHEADER, *PBITMAPINFOHEADER;
 
 //////////////////////////////////////////////////////////////////////////////
-// メイン関数
+// メイン関数 (T: main function)
 //////////////////////////////////////////////////////////////////////////////
 int main(int argc, char *argv[])
 {
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 
   image = (unsigned char *)malloc(height*width*3);
 
-  // ファイルヘッダの設定
+  // ファイルヘッダの設定 (T: File Header Configuration)
   tbuff[0] = 'B';
   tbuff[1] = 'M';
   fwrite(tbuff,2,1,wfp);
@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
   tbuff[0] = 54;
   fwrite(tbuff,4,1,wfp);
 
-  // インフォメーションの設定
+  // インフォメーションの設定 (T: Information of Configuration)
   lpBi.biSize            = 40;
   lpBi.biWidth           = width;
   lpBi.biHeight          = height;
