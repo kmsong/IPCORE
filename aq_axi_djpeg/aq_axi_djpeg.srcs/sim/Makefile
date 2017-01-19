@@ -6,10 +6,11 @@ fBasename		= $(basename $(notdir $(MODEL_PATH)/$(iFile)))
 #	@echo $(MAKECMDGOALS)
 
 NCSIM : GEN_TV
-	ncverilog -clean -f sim.f +access+rwc +nc64bit \
+	ncverilog -f sim.f +access+rwc +nc64bit -clean \
 	+defparam+tb_aq_djpeg.sBasenameMem="$(fBasename).mem" \
 	+defparam+tb_aq_djpeg.sBasenameLog="$(fBasename).log" \
-	+defparam+tb_aq_djpeg.sBasenameDat="$(fBasename).dat"
+	+defparam+tb_aq_djpeg.sBasenameDat="$(fBasename).dat" \
+	-input shm.tcl +ncrun
 	$(MODEL_PATH)/convsim $(fBasename).dat $(fBasename).bmp
 	#display $(fBasename).bmp
 

@@ -89,13 +89,13 @@ module tb_aq_djpeg;
 	end
 
 // add by kms
-parameter               sBasenameMem    = "sample2.mem"     ;
-parameter               sBasenameLog    = "sample2.log"     ;
-parameter               sBasenameDat    = "sample2.dat"     ;
-initial begin
-       $shm_open;
-       $shm_probe("ACMT");
-end
+parameter               sBasenameMem    = "sample0.mem"     ;
+parameter               sBasenameLog    = "sample0.log"     ;
+parameter               sBasenameDat    = "sample0.dat"     ;
+//initial begin
+//       $shm_open;
+//       $shm_probe("ACMT");
+//end
 
 	// Read JPEG File
 	initial begin
@@ -420,7 +420,7 @@ end
 		$fclose(fDescLog);  // add by kms
 
 //		$coverage_save("sim.cov");
-		$finish();
+		$finish(2);
 		//$stop();
 	end
 
