@@ -45,7 +45,7 @@ module tb_aq_djpeg;
 	wire [7:0]	OutB;
 
 	integer	 count;
-	reg [23:0]	rgb_mem [0:1920*1080-1];
+	reg [23:0]	rgb_mem [0:3840*2160-1];
 
 	initial begin
 		count = 0;

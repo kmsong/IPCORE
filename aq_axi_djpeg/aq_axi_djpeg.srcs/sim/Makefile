@@ -9,10 +9,10 @@ NCSIM : GEN_TV
 	ncverilog -f sim.f +access+rwc +nc64bit -clean \
 	+defparam+tb_aq_djpeg.sBasenameMem="$(fBasename).mem" \
 	+defparam+tb_aq_djpeg.sBasenameLog="$(fBasename).log" \
-	+defparam+tb_aq_djpeg.sBasenameDat="$(fBasename).dat" \
-	-input shm.tcl +ncrun
+	+defparam+tb_aq_djpeg.sBasenameDat="$(fBasename).dat"
+	#-input shm.tcl +ncrun
 	$(MODEL_PATH)/convsim $(fBasename).dat $(fBasename).bmp
-	#display $(fBasename).bmp
+	#+display $(fBasename).bmp &
 
 IRUN : GEN_TV
 	#irun -f sim.f -access +rwc -processor 4 -profthread
@@ -21,7 +21,7 @@ IRUN : GEN_TV
 	-defparam tb_aq_djpeg.sBasenameLog="$(fBasename).log" \
 	-defparam tb_aq_djpeg.sBasenameDat="$(fBasename).dat"
 	$(MODEL_PATH)/convsim $(fBasename).dat $(fBasename).bmp
-	#display $(fBasename).bmp
+	#+display $(fBasename).bmp
 
 GEN_TV :
 	gcc -o $(MODEL_PATH)/convbtoh $(MODEL_PATH)/convbtoh.c
