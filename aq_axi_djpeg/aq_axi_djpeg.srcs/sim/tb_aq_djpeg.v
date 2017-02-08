@@ -424,4 +424,13 @@ parameter               sBasenameDat    = "sample0.dat"     ;
 		//$stop();
 	end
 
+    initial begin
+    //$timeformat(unit#, prec#, "unit", minwidth);
+    $timeformat(-3, 2, " ms", 10);    // -3 and " ms" give useful display msg
+        forever begin 
+            #1_000_000_000;
+            $write("\n[NOTE] [%t ] -------- SIMULATION TIME --------\n", $time);
+        end
+    end
+
 endmodule
